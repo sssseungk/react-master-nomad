@@ -18,6 +18,11 @@ const rotationAnimation = keyframes`
   }
 `;
 
+const Emoji = styled.span`
+  font-size: 36px;
+`;
+
+
 const Box = styled.div`
   height: 200px;
   width: 200px;
@@ -26,14 +31,11 @@ const Box = styled.div`
   justify-content: center;
   align-items: center;
   animation: ${rotationAnimation} 1s linear infinite;
-  // box 안의 span target하기
-  span{
-    font-size: 36px;
-    // span:hover{} 과 같음 :: pseudo collector
+  // styled component 자체를 타겟하기
+  ${Emoji}{
     &:hover{
-      font-size: 48px
+      font-size: 98px
     }
-    // span::active와 같음 
     &:active{
       opacity: 0;
     }
@@ -45,8 +47,9 @@ function App(){
   return (
     <Wrapper>
       <Box>
-        <span>🤓</span>
+        <Emoji>🤓</Emoji>
       </Box>
+      <Emoji>🔥</Emoji>
     </Wrapper>
   )
 }
@@ -54,6 +57,6 @@ function App(){
 export default App;
 
 
-// styled components에서 animation 주는 방법 : helper function import 하기 {keyframse}
-// 컴포넌트에 다른 태그 target 하기
+// 태그 종류와 상관없이 컴포넌트 타겟팅 => 컴포넌트 안에 styledcomponent 자체를 타겟팅하기
+// ex. ${Emoji}{&::hover{}}
 
