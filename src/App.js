@@ -1,62 +1,77 @@
 import styled, {keyframes} from "styled-components";
 
+const Title = styled.h1`
+  color: tomato;
+  &:hover{
+    color: teal;
+  }
+`;
+
 const Wrapper = styled.div`
   display: flex;
-`;
-
-const rotationAnimation = keyframes`
-  0%{
-    transform: rotate(0deg);
-    border-radius: 0px;
-  }
-  50%{
-    border-radius: 100px;
-  }
-  100%{
-    transform: rotate(360deg);
-    border-radius: 0px;
-  }
-`;
-
-const Emoji = styled.span`
-  font-size: 36px;
-`;
-
-
-const Box = styled.div`
-  height: 200px;
-  width: 200px;
-  background-color: tomato;
-  display: flex;
+  height: 100vh;
+  width: 100vw;
   justify-content: center;
   align-items: center;
-  animation: ${rotationAnimation} 1s linear infinite;
-  // styled component 자체를 타겟하기
-  ${Emoji}{
-    &:hover{
-      font-size: 98px
-    }
-    &:active{
-      opacity: 0;
-    }
+  ${Title}:hover{
+    font-size: 99px;
   }
+`;
+
+const Box = styled.div`
+  background-color: ${(props) => props.bgColor};
+  width: 100px;
+  height: 100px;
+`;
+
+// Box 컴포넌트 확장
+const Circle = styled(Box)`
+  border-radius: 50px;
+`;
+
+const Btn = styled.button`
+  color: tomato;
+`;
+
+// styled component에 속성값 추가하기
+const Input = styled.input.attrs({  required: true, maxLength: 10 })`
+  background-color: tomato
+`;
+
+/* 애니메이션 */
+const anim = keyframes`
+  from{
+    color:tomato;
+  }
+  to{
+    color: teal;
+  }
+`;
+
+const BtnAnimation = styled.button`
+  animation: ${anim} 0.5s infinite
 `;
 
 
 function App(){
   return (
     <Wrapper>
-      <Box>
-        <Emoji>🤓</Emoji>
-      </Box>
-      <Emoji>🔥</Emoji>
+      <Title>Hello</Title>
+      {/* props로 컴포넌트에 다른 속성값 설정 */}
+      <Box bgColor="teal"/>
+      <Circle bgColor="tomato"/>
+      <Btn>Log in</Btn>
+      {/* 컴포넌트의 style은 그대로, tag만 바꾸기 */}
+      <Btn as="a">Log out</Btn>
+      <Input/>
+      <Input/>
+      <Input/>
+      <Input/>
+      <BtnAnimation>Animation</BtnAnimation>
     </Wrapper>
   )
 }
 
 export default App;
 
-
-// 태그 종류와 상관없이 컴포넌트 타겟팅 => 컴포넌트 안에 styledcomponent 자체를 타겟팅하기
-// ex. ${Emoji}{&::hover{}}
 
