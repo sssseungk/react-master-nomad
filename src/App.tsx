@@ -1,40 +1,33 @@
-import { useState } from "react";
+import styled from "styled-components";
+
+
+const Container = styled.div`
+  /* 우리가 만든 theme에 접근하기 */
+  background-color: ${(props) => props.theme.bgColor};
+`;
+
+const H1 = styled.h1`
+  color: ${(props) => props.theme.textColor};
+`;
 
 
 function App(){
-  const [value, setValue] = useState("");
-  // any 대신 타입 지정해줘야함 
-  // 타입스크립트는 onChange 함수가 InputElement에 의해 실행되는 것을 알게됨
-  // HTMLInputElement가 이벤트를 발생시킨다. 
-  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
-    // const value = event.currentTarget.value랑 같은 의미 
-    // currentTarget 안에서 여러 값을 가져오고 싶을 때 간단하게 작성하기 위함
-    // 예시 : const {currentTarget: {value, tagName, width, id} = event;}
-    const {currentTarget: {value},
-    } = event;
-  setValue(value);
-  };
-
-  // HTMLFormElement가 이벤트를 발생시킨다. 
-  const onSubmit = () => 
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      console.log("hello", value);
-    };
-
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <input 
-          type="text" 
-          placeholder="username"
-          value={value}
-          onChange={onChange}
-        />
-        <button>Log in</button>
-      </form>
-    </div>
+    <Container>
+      <H1>protected</H1>
+    </Container>
   )
 }
 
 export default App;
+
+
+/*
+* 타입스크립트와 styled components 테마 연결하기
+1. styped components 설치하기
+2. 선언 파일(declaration) 만들기 : styled.d.ts
+3. 테마 만들기 : theme.ts 파일 생성
+4. index.tsx에 ThemeProvider 생성 및 테마 전달
+5. app.tsx에서 props로 받아 사용하기
+*/
+
