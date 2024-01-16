@@ -1,4 +1,4 @@
-import styled, {keyframes} from "styled-components";
+import styled from "styled-components";
 
 // Title은 App 안에, App은 ThemeProvider 안에 존재하기 때문에 props 사용 가능
 const Title = styled.h1`
