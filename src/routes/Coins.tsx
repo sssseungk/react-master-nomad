@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
-padding: 0px 20px;
+  padding: 0px 20px;
 `;
 
 const Header = styled.header`
@@ -87,4 +87,3 @@ function Coins(){
 export default Coins;
 
 
-// anchor 태그는 새로고침되기 때문에 Link를 사용한다.
