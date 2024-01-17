@@ -23,9 +23,10 @@ const Coin = styled.li`
   margin-bottom: 10px;
   border-radius: 15px;
   a{
+    display: flex;
+    align-items: center;
     padding: 20px;
     transition: color 0.2s ease-in;
-    display: block;
   }
   &:hover{
     a{
@@ -42,6 +43,12 @@ font-size: 48px;
 const Loader = styled.span`
   text-align: center;
   display: block;
+`;
+
+const Img = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
 `;
 
 // 받아오는 코인 데이터가 어떻게 생겼는지 알려줌
@@ -73,7 +80,6 @@ function Coins(){
 
   
   return (
-
     <Container>
       <Header>
         <Title>코인</Title>
@@ -84,15 +90,23 @@ function Coins(){
         <CoinsList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              {/* Link를 통해 다른 화면에 정보를 보낼 수 있다.  */}
+              <Link 
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: {name: coin.name},
+                }}
+                >
+                <Img
+                  src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}
+                />
+                {coin.name} &rarr;</Link>
             </Coin>
           ))}
-        </CoinsList>
+        </CoinsList> 
       )}
     </Container>
   )
 }
 
 export default Coins;
-
-
