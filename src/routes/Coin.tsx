@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Switch, Route, useLocation, useParams, Link } from "react-router-dom";
+import { Switch, Route, useLocation, useParams, Link, useRouteMatch } from "react-router-dom";
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
@@ -122,14 +122,39 @@ const Description = styled.p`
   margin: 20px 0px;
 `;
 
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
 
+// boolean 형태의 isActive prop 추가 
+const Tab = styled.span<{ isActive: boolean }>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  /* 클릭하면 색 변하게 하기 */
+  color: ${(props) =>
+    props.isActive ? props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
+`;
+ 
 function Coin(){
   const [loading, setLoading] = useState(true);
   const { coinId } = useParams<RouteParams>();
   const {state} = useLocation<RouteState>();
   const [info, setInfo] = useState<InfoData>();
   const [priceInfo, setPriceInfo] = useState<PriceData>();
-  
+  const priceMatch = useRouteMatch("/:coinId/price");
+  const chartMatch = useRouteMatch("/:coinId/chart");
+
   useEffect(() => {
     (async () => {
       const infoData = await (
@@ -141,8 +166,7 @@ function Coin(){
       ) .json();
       setInfo(infoData);
       setPriceInfo(priceData);
-      setLoading(false);
-      
+      setLoading(false); 
     })();
   }, [coinId]);    // coinId가 바뀌면 useEffect 안의 코드가 실행됨
 
@@ -183,13 +207,15 @@ function Coin(){
               <span>{priceInfo?.max_supply}</span>
             </OverviewItem>
           </Overview>
-          <Link to={`/${coinId}/chart`}>
-            Chart
-          </Link>
-          <Link to={`/${coinId}/price`}>
-            Price
-          </Link>
-          
+          <Tabs>
+            {/* 해당 URL에 들어가 Object를 받으면 */}
+            <Tab isActive={chartMatch !== null}>
+              <Link to={`/${coinId}/chart`}>Chart</Link>
+            </Tab>
+            <Tab isActive={priceMatch !== null}>
+              <Link to={`/${coinId}/price`}>Price</Link>
+            </Tab>
+          </Tabs>
           <Switch>
             <Route path={`/:coinId/price`}>
               <Price />
@@ -205,3 +231,9 @@ function Coin(){
 }
 
 export default Coin;
+
+
+/* 
+* useRouteMatch : 유저가 특정 UR에 있는지 여부를 알려주는 훅
+  ㄴ 유저가 해당 url 안에 있다면 object를(isExact: true), 아니면 null을 반환함
+*/
