@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Switch, Route, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import Price from "./Price";
+import Chart from "./Chart";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -181,6 +183,14 @@ function Coin(){
               <span>{priceInfo?.max_supply}</span>
             </OverviewItem>
           </Overview>
+          <Switch>
+            <Route path={`/${coinId}/price`}>
+              <Price />
+            </Route>
+            <Route path={`/${coinId}/chart`}>
+              <Chart />
+            </Route>
+          </Switch>
         </>
       )}
     </Container>
@@ -188,3 +198,11 @@ function Coin(){
 }
 
 export default Coin;
+
+
+/*
+* Nested router : 중첩된 라우터를 구현하는 방식, 하위 경로에 대한 라우팅을 구현하는 방식
+* Switch : 경로에 따라 다른 컴포넌트를 렌더링할 수 있도록 한다. 
+  ㄴ 위에서부터 아래로 순서대로 Route를 확인하면서, 첫 번째로 일치하는 경로에 해당하는 컴포넌트를 렌더링한다. 
+* Route는 path의 경로에 매칭되었을 때 어떤 컴포넌트를 렌더링할지 정의한다. 
+*/
