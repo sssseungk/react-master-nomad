@@ -94,6 +94,33 @@ interface PriceData{
   };
 }
 
+// 검정색 박스 
+const Overview = styled.div`
+  display: flex;
+  justify-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+`;
+
+// 검정색 박스 안의 아이템(2개의 span) 
+const OverviewItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  span:first-child {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+`;
+
+const Description = styled.p`
+  margin: 20px 0px;
+`;
+
+
 function Coin(){
   const [loading, setLoading] = useState(true);
   const { coinId } = useParams<RouteParams>();
@@ -111,20 +138,51 @@ function Coin(){
         await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
       ) .json();
       setInfo(infoData);
-      // console.log(infoData);
       setPriceInfo(priceData);
-      // console.log(priceData);
+      setLoading(false);
       
     })();
-  })
+  }, [coinId]);    // coinId가 바뀌면 useEffect 안의 코드가 실행됨
 
   return (
     <Container>
       <Header>
-        {/* state가 존재하면 name을 가져오고, 없으면 loading을 보여줘라 */}
-        <Title>{state?.name || "Loading.."}</Title>
+        <Title>
+          {/* loading -> 메인페이지에서가 아닌, 상세페이지로 바로 들어온경우 */}
+          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+        </Title>
       </Header>
-      {loading ? <Loader>Loading...</Loader> : null}
+      {loading ? (
+        <Loader>Loading...</Loader>
+      ) : (
+        <>
+          <Overview>
+            <OverviewItem>
+              <span>Rank:</span>
+              <span>{info?.rank}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Symbol:</span>
+              <span>${info?.symbol}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Open Source:</span>
+              <span>{info?.open_source ? "Yes" : "No"}</span>
+            </OverviewItem>
+          </Overview>
+          <Description>{info?.description}</Description>
+          <Overview>
+            <OverviewItem>
+              <span>Total Suply:</span>
+              <span>{priceInfo?.total_supply}</span>
+            </OverviewItem>
+            <OverviewItem>
+              <span>Max Supply:</span>
+              <span>{priceInfo?.max_supply}</span>
+            </OverviewItem>
+          </Overview>
+        </>
+      )}
     </Container>
   );
 }
