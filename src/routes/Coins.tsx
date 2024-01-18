@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoins } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -52,7 +54,7 @@ const Img = styled.img`
 `;
 
 // 받아오는 코인 데이터가 어떻게 생겼는지 알려줌
-interface CoinInterface{
+interface ICoin{
   id: string,
   name: string,
   symbol: string,
@@ -64,8 +66,13 @@ interface CoinInterface{
 
 function Coins(){
 
+  // reqct query의 useQuery 훅 사용 (query 고유식별자, fetcher 함수)
+  // * useQuery 훅 : api.ts의 fetcher 함수를 부르고, fetcher 함수가 loading 중이라면 그것을 알려주고, fetcher 함수가 끝나면 json을 data에 넣는다. 
+  const { isLoading, data} = useQuery<ICoin[]>("allCoins", fetchCoins);   
+  //! api.ts로 대체
+  /*
   // 기본값은 빈배열로 지정
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
+  const [coins, setCoins] = useState<ICoin[]>([]);
   const [loading, setLoading] = useState(true);
 
   // API Fetch 하기
@@ -77,18 +84,18 @@ function Coins(){
       setLoading(false);
     })();
   }, [])
-
+  */
   
   return (
     <Container>
       <Header>
         <Title>코인</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <CoinsList>
-          {coins.map((coin) => (
+          {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               {/* Link를 통해 다른 화면에 정보를 보낼 수 있다.  */}
               <Link 
