@@ -53,15 +53,27 @@ function Chart({coinId}:ChartProps) {
             // 차트 선 커스텀
             stroke: {
               curve: "smooth",
-              width: 3,
+              width: 4,
             },
             yaxis: {
               show: false
             },
             xaxis: {
-              labels: {show: false},
-              axisTicks: {show: false},
-              axisBorder: {show: false},
+              axisBorder: { show: false },
+              axisTicks: { show: false },
+              labels: { show: false },
+              type: "datetime",
+              categories: data?.map((price) => new Date(+price.time_close * 1000).toISOString()),
+            },
+            fill: {
+              type: "gradient", 
+              gradient: { gradientToColors: ["#0be881"], stops: [0, 100] },
+            },
+            colors: ["#0fbcf9"],
+            tooltip: {
+              y: {
+                formatter: (value) => `$${value.toFixed(2)}`,
+              },
             }
           }}
         />
