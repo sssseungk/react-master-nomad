@@ -18,6 +18,20 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+`;
+
+const PrevBtn = styled.button`
+  background-color: #8c7ae6;
+  color: white;
+  width: 60px;
+  height: 30px;
+  border-radius: 20px;
+  border: none;
+  position: absolute;
+  top: 35px;
+  left: 20px;
+  cursor: pointer;
 `;
 
 const Title = styled.h1`
@@ -170,6 +184,9 @@ function Coin(){
         </title>
       </Helmet>
       <Header>
+        <Link to="/">
+          <PrevBtn>Back</PrevBtn>
+        </Link>
         <Title>
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
