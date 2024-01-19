@@ -37,11 +37,6 @@ interface RouteState{
   name:string;
 }
 
-// info 타입 정의하기
-// 1. console.log(infoData)로 콘솔에서 확인한 infoData 우클릭 > Store object as global variable (temp1에 객체 데이터가 저장됨)
-// 2. Object.keys(temp1)로 temp1 객체의 키값들 뽑아내기
-// 3. Object.keys(temp1).join() 으로 키들 문자열로 합친 후 interface의 id에 넣기
-// 4. Object.values(temp1).map(v => typeof v).join()로 값의 타입들 뽑아내서 interface의 value에 넣기
 interface InfoData{
   id: string;
   name: string;
@@ -150,40 +145,23 @@ const Tab = styled.span<{ isActive: boolean }>`
  
 function Coin(){
   const { coinId } = useParams<RouteParams>();
-  const {state} = useLocation<RouteState>();
-  // const [loading, setLoading] = useState(true);
-  // const [info, setInfo] = useState<InfoData>();
-  // const [priceInfo, setPriceInfo] = useState<PriceData>();
+  const { state } = useLocation<RouteState>();
   const priceMatch = useRouteMatch("/:coinId/price");
   const chartMatch = useRouteMatch("/:coinId/chart");
-  // query는 각각 고유한 id 갖는 것이 좋다. (둘 다 coinId x)
-  const {isLoading: infoLoading, data: infoData} = useQuery<InfoData>(["info", coinId], () => fetchCoinInfo(coinId));
-  const {isLoading: tickersLoading, data: tickersData} = useQuery<PriceData>(["tickers", coinId], () =>fetchCoinTickers(coinId));
-
-  // ! react-query로 대체한 코드
-  /* 
-  useEffect(() => {
-    (async () => {
-      const infoData = await (
-        // 코인 정보 받아오기
-        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-      ).json();
-      const priceData = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ) .json();
-      setInfo(infoData);
-      setPriceInfo(priceData);
-      setLoading(false); 
-    })();
-  }, [coinId]);    // coinId가 바뀌면 useEffect 안의 코드가 실행됨
-  */
+  const {isLoading: infoLoading, data: infoData} = useQuery<InfoData>(
+    ["info", coinId], 
+    () => fetchCoinInfo(coinId)
+  );
+  const {isLoading: tickersLoading, data: tickersData} = useQuery<PriceData>(
+    ["tickers", coinId], 
+    () =>fetchCoinTickers(coinId)
+  );
 
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
       <Header>
         <Title>
-          {/* loading -> 메인페이지에서가 아닌, 상세페이지로 바로 들어온경우 */}
           {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
@@ -240,9 +218,3 @@ function Coin(){
 }
 
 export default Coin;
-
-
-/* 
-* useRouteMatch : 유저가 특정 UR에 있는지 여부를 알려주는 훅
-  ㄴ 유저가 해당 url 안에 있다면 object를(isExact: true), 아니면 null을 반환함
-*/

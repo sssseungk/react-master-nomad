@@ -53,7 +53,6 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
-// 받아오는 코인 데이터가 어떻게 생겼는지 알려줌
 interface ICoin{
   id: string,
   name: string,
@@ -65,26 +64,7 @@ interface ICoin{
 }
 
 function Coins(){
-
-  // reqct query의 useQuery 훅 사용 (query 고유식별자, fetcher 함수)
-  // * useQuery 훅 : api.ts의 fetcher 함수를 부르고, fetcher 함수가 loading 중이라면 그것을 알려주고, fetcher 함수가 끝나면 json을 data에 넣는다. 
   const { isLoading, data} = useQuery<ICoin[]>("allCoins", fetchCoins);   
-  //! api.ts로 대체
-  /*
-  // 기본값은 빈배열로 지정
-  const [coins, setCoins] = useState<ICoin[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  // API Fetch 하기
-  useEffect(() => {
-    (async() => {
-      const response = await fetch('https://api.coinpaprika.com/v1/coins');
-      const json = await response.json();
-      setCoins(json.slice(0, 100));
-      setLoading(false);
-    })();
-  }, [])
-  */
   
   return (
     <Container>
@@ -97,7 +77,6 @@ function Coins(){
         <CoinsList>
           {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
-              {/* Link를 통해 다른 화면에 정보를 보낼 수 있다.  */}
               <Link 
                 to={{
                   pathname: `/${coin.id}`,
