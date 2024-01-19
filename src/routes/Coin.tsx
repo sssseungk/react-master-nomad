@@ -195,7 +195,6 @@ function Coin(){
             </OverviewItem>
           </Overview>
           <Tabs>
-            {/* 해당 URL에 들어가 Object를 받으면 */}
             <Tab isActive={chartMatch !== null}>
               <Link to={`/${coinId}/chart`}>Chart</Link>
             </Tab>
@@ -208,7 +207,7 @@ function Coin(){
               <Price />
             </Route>
             <Route path={`/:coinId/chart`}>
-              <Chart />
+              <Chart coinId={coinId}/>
             </Route>
           </Switch>
         </>
